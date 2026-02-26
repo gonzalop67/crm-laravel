@@ -1,7 +1,7 @@
 @extends('layout.admin')
 
 @section('content')
-    <h3>Clientes</h3>
+    <h3 class="mt-3">Clientes</h3>
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show">
             {{ session('success') }}
@@ -32,9 +32,11 @@
                             <td>{{ $client->email }}</td>
                             <td>{{ $client->user->name }}</td>
                             <td>
+                                <a class="btn btn-primary btn-sm" href="{{ route('clients.show', $client->id) }}">Detalles</a>
                                 <a class="btn btn-warning btn-sm" href="{{ route('clients.edit', $client->id) }}">Editar</a>
 
-                                <form action="{{ route('clients.destroy', $client->id) }}" method="post" style="display: inline">
+                                <form action="{{ route('clients.destroy', $client->id) }}" method="post"
+                                    style="display: inline">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
@@ -44,6 +46,7 @@
                     @endforeach
                 </tbody>
             </table>
+            {!! $clients->links() !!}
         </div>
     </div>
 @endsection

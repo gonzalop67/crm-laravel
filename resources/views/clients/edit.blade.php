@@ -1,7 +1,7 @@
 @extends('layout.admin')
 
 @section('content')
-    <h3>Clientes</h3>
+    <h3 class="mt-3">Editar Cliente</h3>
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>

@@ -5,27 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Client extends Model
+class Contact extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'client_id',
         'name',
         'email',
         'phone',
-        'company',
+        'position',
         'notes',
-        'active',
-        'user_id'
+        'active'
     ];
 
-    public function user()
+    public function client()
     {
-        return $this->belongsTo(User::class);
-    }
-
-    public function contacts()
-    {
-        return $this->hasMany(Contact::class);
+        return $this->belongsTo(Client::class);
     }
 }

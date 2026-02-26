@@ -52,7 +52,8 @@
                 </footer>
             </div>
         </div>
+        <script src="{{ asset('js/jquery/jquery-3.7.1.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-        <script src="js/scripts.js"></script>
+        <script src="{{ asset('js/scripts.js') }}"></script>
     </body>
 </html>

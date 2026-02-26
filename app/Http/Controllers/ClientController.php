@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ClientController extends Controller
 {
@@ -12,7 +13,7 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $clients = Client::where('active', 1)->get();
+        $clients = Client::where('active', 1)->paginate(10);
         return view('clients.index', compact('clients'));
     }
 
@@ -46,17 +47,33 @@ class ClientController extends Controller
             'phone' => $request->phone,
             'company' => $request->company,
             'notes' => $request->notes,
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
         ]);
 
         return redirect()->route('clients.index')->with('success', 'Cliente creado correctamente.');
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(Client $client)
+    {
+        $client->load('contacts');
+
+        return view('clients.show', compact('client'));
+    }
+
+    /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Client $client)
+    public function edit($id)
     {
+        $client = Client::find($id);
+
+        if (!$client) {
+            return view('clients.notfound');
+        }
+
         return view('clients.edit', compact('client'));
     }
 
