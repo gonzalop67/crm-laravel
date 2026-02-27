@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Client::class, 'user_id');
     }
+
+    public function followUps()
+    {
+        return $this->hasMany(FollowUps::class);
+    }
 }

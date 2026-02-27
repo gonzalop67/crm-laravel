@@ -14,8 +14,8 @@
 
     <div class="text-center">
         <div class="btn-group">
-            {{-- <a href="" class="btn btn-primary active">Contactos</a> --}}
-            {{-- <a href="{{ route('clients.followups.index', $client) }}" class="btn btn-outline-primary">Seguimientos</a> --}}
+            <a href="{{ route('clients.show', $client) }}" class="btn btn-primary active">Contactos</a>
+            <a href="{{ route('clients.followups.index', $client) }}" class="btn btn-outline-primary">Seguimientos</a>
         </div>
     </div>
 
