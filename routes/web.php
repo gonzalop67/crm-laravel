@@ -5,6 +5,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FollowUpsController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
@@ -25,4 +26,6 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::resource('clients.followups', FollowUpsController::class)->only(['index', 'show', 'store', 'update']);
+
+    Route::resource('tasks', TaskController::class);
 });
