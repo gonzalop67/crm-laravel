@@ -6,6 +6,7 @@ use App\Models\Client;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
 use SweetAlert2\Laravel\Swal;
 
 class TaskController extends Controller
@@ -62,9 +63,10 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Task $task)
+    public function show(Task $task): JsonResponse
     {
-        //
+        $task->load('client');
+        return response()->json($task);
     }
 
     /**
@@ -114,5 +116,17 @@ class TaskController extends Controller
         ]);
 
         return redirect()->route('tasks.index');
+    }
+
+    public function calendar()
+    {
+        $tasks = Task::all();
+        return view('tasks.calendar', compact('tasks'));
+    }
+
+    public function events()
+    {
+        $tasks = Task::select(['id', 'title', 'due_date as start'])->get();
+        return response()->json($tasks);
     }
 }
