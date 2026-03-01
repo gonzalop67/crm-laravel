@@ -1,14 +1,5 @@
 @extends('layout.admin')
 
-@push('style')
-<style>
-    #calendar {
-        width: 1000px;
-        height: 500px;
-    }
-</style>
-@endpush
-
 @section('content')
 
 <div class="row my-3">
