@@ -10,7 +10,9 @@
     @endif
     <div class="row mb-3">
         <div class="col-xl-3 col-md-6">
-            <a href="{{ route('clients.create') }}" class="btn btn-primary">Nuevo</a>
+            @permission('clientes-registrar')
+                <a href="{{ route('clients.create') }}" class="btn btn-primary">Nuevo</a>
+            @endpermission
             <a href="{{ route('clients.deleted') }}" class="btn btn-warning">Historial</a>
         </div>
     </div>
@@ -32,15 +34,18 @@
                             <td>{{ $client->email }}</td>
                             <td>{{ $client->user->name }}</td>
                             <td>
-                                <a class="btn btn-primary btn-sm" href="{{ route('clients.show', $client->id) }}">Detalles</a>
+                                <a class="btn btn-primary btn-sm"
+                                    href="{{ route('clients.show', $client->id) }}">Detalles</a>
                                 <a class="btn btn-warning btn-sm" href="{{ route('clients.edit', $client->id) }}">Editar</a>
 
-                                <form action="{{ route('clients.destroy', $client->id) }}" method="post"
-                                    style="display: inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
-                                </form>
+                                @permission('clientes-eliminar')
+                                    <form action="{{ route('clients.destroy', $client->id) }}" method="post"
+                                        style="display: inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
+                                    </form>
+                                @endpermission
                             </td>
                         </tr>
                     @endforeach

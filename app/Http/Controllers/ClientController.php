@@ -13,6 +13,10 @@ class ClientController extends Controller
      */
     public function index()
     {
+        $user = auth()->user();
+        if (!$user->hasPermission('clientes-listar')) {
+            abort(403, "No tienes permiso para el módulo de clientes.");
+        }
         $clients = Client::where('active', 1)->paginate(10);
         return view('clients.index', compact('clients'));
     }
@@ -28,6 +32,10 @@ class ClientController extends Controller
      */
     public function create()
     {
+        $user = auth()->user();
+        if (!$user->hasPermission('clientes-registrar')) {
+            abort(403, "No tienes permiso para registrar clientes.");
+        }
         return view('clients.create');
     }
 

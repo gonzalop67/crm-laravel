@@ -8,15 +8,21 @@
                     Dashboard
                 </a>
 
-                <a class="nav-link" href="{{ route('clients.index') }}">
-                    <div class="sb-nav-link-icon"><i class="fa-solid fa-users-line"></i></div>
-                    Clientes
-                </a>
+                @auth
+                    @if (auth()->user()->hasPermission('clientes-listar'))
+                        <a class="nav-link" href="{{ route('clients.index') }}">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-users-line"></i></div>
+                            Clientes
+                        </a>
+                    @endif
+                @endauth
 
-                <a class="nav-link" href="{{ route('tasks.index') }}">
-                    <div class="sb-nav-link-icon"><i class="fa-solid fa-list-check"></i></div>
-                    Tareas
-                </a>
+                @permission('tareas-listar')
+                    <a class="nav-link" href="{{ route('tasks.index') }}">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-list-check"></i></div>
+                        Tareas
+                    </a>
+                @endpermission
 
                 <a class="nav-link" href="{{ route('calendar') }}">
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-calendar-days"></i></div>
@@ -29,6 +35,17 @@
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-gear"></i></div>
                     Configuración
                 </a>
+
+                <a class="nav-link" href="{{ route('users.index') }}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-users-gear"></i></div>
+                    Usuarios
+                </a>
+
+                <a class="nav-link" href="{{ route('permissions.index') }}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-user-shield"></i></div>
+                    Permisos
+                </a>
+
 
             </div>
         </div>

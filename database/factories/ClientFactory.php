@@ -23,7 +23,7 @@ class ClientFactory extends Factory
             'phone' => $this->faker->phoneNumber,
             'company' => $this->faker->company,
             'notes' => $this->faker->text,
-            'user_id' => User::inRandomOrder()->first()->id,
+            'user_id' => User::inRandomOrder()->first()->id ?? User::factory(),
         ];
     }
 }

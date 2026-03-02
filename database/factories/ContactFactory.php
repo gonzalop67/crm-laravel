@@ -23,7 +23,7 @@ class ContactFactory extends Factory
             'phone' => $this->faker->phoneNumber,
             'position' => $this->faker->jobTitle,
             'notes' => $this->faker->text,
-            'client_id' => Client::inRandomOrder()->first()->id ?? Client::factory()->create()->id,
+            'client_id' => Client::inRandomOrder()->first()->id ?? Client::factory(),
         ];
     }
 }
