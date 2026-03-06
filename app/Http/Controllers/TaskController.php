@@ -2,15 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\TaskMail;
 use App\Models\Client;
 use App\Models\Task;
+use App\Models\User;
+use App\Notifications\TaskNotification;
+use App\Providers\MailConfigServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use SweetAlert2\Laravel\Swal;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Mail;
 
-class TaskController extends Controller
+class TaskController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            'auth',
+            new Middleware('permission:tareas', only: ['index']),
+            new Middleware('permission:tareas-crear', only: ['create', 'store']),
+            new Middleware('permission:tareas-editar', only: ['edit', 'update']),
+            new Middleware('permission:tareas-eliminar', only: ['destroy']),
+            new Middleware('permission:calendario', only: ['calendar', 'events']),
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -50,6 +69,12 @@ class TaskController extends Controller
         $task->client_id = $request->input('client_id');
         $task->user_id = Auth::id();
         $task->save();
+
+        MailConfigServiceProvider::class; // Asegura que el proveedor de configuración de correo se ejecute
+        //Mail::to($task->user->email)->send(new TaskMail($task));
+
+        $admin = User::find(1); // Asumiendo que el usuario con ID 1 es el administrador
+        $admin->notify(new TaskNotification($task));
 
         Swal::success([
             'title' => 'Tarea guardada',
@@ -128,5 +153,15 @@ class TaskController extends Controller
     {
         $tasks = Task::select(['id', 'title', 'due_date as start'])->get();
         return response()->json($tasks);
+    }
+
+    public function markAsRead($id)
+    {
+        $notification = auth()->user()->unreadNotifications->find($id);
+        if ($notification) {
+            $notification->markAsRead();
+            return response()->json(['status' => 'ok', 'count' => auth()->user()->unreadNotifications->count()], 200);
+        }
+        return response()->json(['status' => 'not_found'], 404);
     }
 }

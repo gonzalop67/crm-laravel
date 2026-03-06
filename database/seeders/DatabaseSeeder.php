@@ -18,11 +18,21 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        /* User::factory()->create([
-            'name' => 'Marco',
-            'email' => 'marco@mail.com',
+        User::factory()->create([
+            'name' => 'Gonzalo',
+            'email' => 'tester@colegionocturnosalamanca.com',
+            'password' => Hash::make('gP67M24e$')
+        ]);
+        /*User::factory()->create([
+            'name' => 'Admin',
+            'email' => 'admin@mail.com',
             'password' => Hash::make('admin123')
-        ]); */
-        User::factory(10)->create();
+        ]);*/
+
+        $this->call([
+            SettingSeeder::class,
+            PermissionSeeder::class,
+            AssignAllPermissionsToAdminSeeder::class
+        ]);
     }
 }

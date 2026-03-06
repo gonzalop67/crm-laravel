@@ -5,18 +5,27 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class ClientController extends Controller
+class ClientController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            'auth',
+            new Middleware('permission:clientes', only: ['index']),
+            new Middleware('permission:clientes-crear', only: ['create', 'store']),
+            new Middleware('permission:clientes-editar', only: ['edit', 'update']),
+            new Middleware('permission:clientes-eliminar', only: ['destroy']),
+            new Middleware('permission:clientes-reingresar', only: ['activate']),
+        ];
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $user = auth()->user();
-        if (!$user->hasPermission('clientes-listar')) {
-            abort(403, "No tienes permiso para el módulo de clientes.");
-        }
         $clients = Client::where('active', 1)->paginate(10);
         return view('clients.index', compact('clients'));
     }
@@ -32,10 +41,6 @@ class ClientController extends Controller
      */
     public function create()
     {
-        $user = auth()->user();
-        if (!$user->hasPermission('clientes-registrar')) {
-            abort(403, "No tienes permiso para registrar clientes.");
-        }
         return view('clients.create');
     }
 

@@ -71,4 +71,11 @@ class User extends Authenticatable
     {
         return $this->permissions()->where('slug', $slug)->exists();
     }
+
+    protected function getCachedPermissions()
+    {
+        return cache()->remember("user_permissions_{$this->id}", now()->addMinutes(30), function () {
+            return $this->permissions()->pluck('slug')->toArray();
+        });
+    }
 }
