@@ -9,11 +9,13 @@
         </div>
     @endif
     <div class="row mb-3">
-        <div class="col-xl-3 col-md-6">
-            @permission('clientes-registrar')
+        <div class="col-xl-6 col-md-6">
+            @permission('clientes-crear')
                 <a href="{{ route('clients.create') }}" class="btn btn-primary">Nuevo</a>
             @endpermission
             <a href="{{ route('clients.deleted') }}" class="btn btn-warning">Historial</a>
+            <a href="{{ route('clients.export') }}" class="btn btn-success">Exportar Excel</a>
+            <a href="{{ route('clients.form-import') }}" class="btn btn-secondary">Importar Clientes</a>
         </div>
     </div>
     <div class="row">

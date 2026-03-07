@@ -8,7 +8,7 @@
     <p><strong>Teléfono:</strong> {{ $client->phone }}</p>
     <p><strong>Empresa:</strong> {{ $client->company }}</p>
 
-    {{-- <a href="{{ route('clients.pdf', $client->id) }}" class="btn btn-secondary">Exportar PDF</a> --}}
+    <a href="{{ route('clients.pdf', $client->id) }}" class="btn btn-secondary">Exportar PDF</a>
 
     <hr>
 

@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\Setting;
+use App\Exports\ClientsExport;
+use App\Imports\ClientsImport;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ClientController extends Controller implements HasMiddleware
 {
@@ -120,5 +125,32 @@ class ClientController extends Controller implements HasMiddleware
         $client->update(['active' => 1]);
 
         return redirect()->route('clients.index')->with('success', 'Cliente regingresado correctamente.');
+    }
+
+    public function generatePdf($id)
+    {
+        $client = Client::with('followUps')->findOrFail($id);
+        $logo = Setting::getValue('logo');
+
+        $pdf = Pdf::loadView('clients.details', compact('client', 'logo'))->setPaper('letter');
+        return $pdf->download('cliente_' . $client->id . '.pdf');
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new ClientsExport, 'clientes.xlsx');
+    }
+
+    public function formUploadClientes()
+    {
+        return view('clients.import');
+    }
+
+    public function import(Request $resquest)
+    {
+        print_r($resquest->file('file'));
+        Excel::import(new ClientsImport, $resquest->file('file'));
+
+        return redirect()->route('clients.index')->with('success', 'Carga masiva de clientes con éxito');
     }
 }
